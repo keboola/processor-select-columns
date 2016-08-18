@@ -1,0 +1,10 @@
+version: '2'
+services:
+  processor-select-columns:
+    build: .
+    image: keboola/processor-select-columns
+    tty: true
+    stdin_open: true
+    command: sh
+    volumes:
+      - ./:/code
