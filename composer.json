@@ -1,5 +1,5 @@
 {
-    "name": "keboola/processor-add-row-number-column",
+    "name": "keboola/processor-select-columns",
     "license": "MIT",
     "type": "project",	
     "require": {
