@@ -9,7 +9,7 @@ $fs = new \Symfony\Component\Filesystem\Filesystem();
 
 foreach ($finder as $testSuite) {
     print "Test " . $testSuite->getPathname() . "\n";
-    $temp = new \Keboola\Temp\Temp("processor-add-filename-column");
+    $temp = new \Keboola\Temp\Temp("processor-select-columns");
     $temp->initRunFolder();
 
     $copyCommand = "cp -R " . $testSuite->getPathname() . "/source/data/* " . $temp->getTmpFolder();
