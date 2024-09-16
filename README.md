@@ -50,3 +50,7 @@ Run the test suite using this command:
 ```
 docker compose run dev composer ci
 ```
+
+## License
+
+MIT licensed, see [LICENSE](./LICENSE) file.
