@@ -1,0 +1,1 @@
+{"delimiter":",","enclosure":"\"","columns":["col1","col2","col3","col4"],"column_metadata":{"col1":[{"key":"KBC.datatype.nullable","value":true}],"col2":[{"key":"KBC.datatype.nullable","value":true}],"col3":[{"key":"KBC.datatype.nullable","value":true}],"col4":[{"key":"KBC.datatype.nullable","value":true}]}}
