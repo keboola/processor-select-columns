@@ -17,5 +17,14 @@ function processManifest(array $manifest, array $parameters): array
 
     $output = $manifest;
     $output['columns'] = $parameters['columns'];
+
+    if (isset($manifest['column_metadata'])) {
+        foreach ($manifest['column_metadata'] as $column => $metadata) {
+            if (!in_array($column, $parameters['columns'])) {
+                unset($output['column_metadata'][$column]);
+            }
+        }
+    }
+
     return $output;
 }
