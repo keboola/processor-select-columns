@@ -48,12 +48,5 @@ docker compose run dev composer install
 Run the test suite using this command:
 
 ```
-docker-compose run tests
+docker compose run dev composer ci
 ```
- 
-## Integration
- - Build is started after push on [Travis CI](https://travis-ci.org/keboola/processor-select-columns)
- - [Build steps](https://github.com/keboola/processor-select-columns/blob/master/.travis.yml)
-   - build image
-   - execute tests against new image
-   - publish image to ECR if release is tagged
