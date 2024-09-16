@@ -1,6 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Keboola\Processor\SelectColumns;
 
-class Exception extends \Exception
+use Exception as OriginalException;
+
+class Exception extends OriginalException
 {
 }

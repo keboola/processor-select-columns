@@ -1,5 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
+use Keboola\Processor\SelectColumns\ConfigDefinition;
+use Keboola\Processor\SelectColumns\Exception;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use function Keboola\Processor\SelectColumns\processFile;
+use function Keboola\Processor\SelectColumns\processManifest;
+
 require('vendor/autoload.php');
 
 $dataDir = getenv('KBC_DATADIR') === false ? '/data/' : getenv('KBC_DATADIR');
@@ -13,45 +27,42 @@ if (!file_exists($configFile)) {
 }
 
 try {
-    $fs = new \Symfony\Component\Filesystem\Filesystem();
-    $jsonDecode = new \Symfony\Component\Serializer\Encoder\JsonDecode(true);
-    $jsonEncode = new \Symfony\Component\Serializer\Encoder\JsonEncode();
+    $fs = new Filesystem();
+    $jsonDecode = new JsonDecode(true);
+    $jsonEncode = new JsonEncode();
 
     $config = $jsonDecode->decode(
         file_get_contents($configFile),
-        \Symfony\Component\Serializer\Encoder\JsonEncoder::FORMAT
+        JsonEncoder::FORMAT,
     );
 
-    $parameters = (new \Symfony\Component\Config\Definition\Processor())->processConfiguration(
-        new \Keboola\Processor\SelectColumns\ConfigDefinition(),
-        [isset($config['parameters']) ? $config['parameters'] : []]
-    );
+    $parameters = (new Processor())->processConfiguration(new ConfigDefinition(), [$config['parameters'] ?? []]);
 
-    $finder = new \Symfony\Component\Finder\Finder();
+    $finder = new Finder();
     $finder->notName('*.manifest')->in($dataDir . '/in/tables')->depth(0);
     foreach ($finder as $file) {
         $columnsInManifest = false;
 
         $manifestFile = $file->getPathname() . '.manifest';
         if (!$fs->exists($manifestFile)) {
-            throw new \Keboola\Processor\SelectColumns\Exception(
-                'Table ' . $file->getBasename() . ' does not have a manifest file.'
+            throw new Exception(
+                'Table ' . $file->getBasename() . ' does not have a manifest file.',
             );
         }
 
         $manifest = $jsonDecode->decode(
             file_get_contents($manifestFile),
-            \Symfony\Component\Serializer\Encoder\JsonEncoder::FORMAT
+            JsonEncoder::FORMAT,
         );
 
         if (!isset($manifest['delimiter'])) {
-            throw new \Keboola\Processor\SelectColumns\Exception(
-                'Manifest file for table ' . $file->getBasename() . ' does not specify delimiter.'
+            throw new Exception(
+                'Manifest file for table ' . $file->getBasename() . ' does not specify delimiter.',
             );
         }
         if (!isset($manifest['enclosure'])) {
-            throw new \Keboola\Processor\SelectColumns\Exception(
-                'Manifest file for table ' . $file->getBasename() . ' does not specify enclosure.'
+            throw new Exception(
+                'Manifest file for table ' . $file->getBasename() . ' does not specify enclosure.',
             );
         }
 
@@ -59,7 +70,7 @@ try {
         $targetManifest = $destination . $file->getFilename() . '.manifest';
         file_put_contents(
             $targetManifest,
-            $jsonEncode->encode(\Keboola\Processor\SelectColumns\processManifest($manifest, $parameters), \Symfony\Component\Serializer\Encoder\JsonEncoder::FORMAT)
+            $jsonEncode->encode(processManifest($manifest, $parameters), JsonEncoder::FORMAT),
         );
 
         if (is_dir($file->getPathname())) {
@@ -70,24 +81,24 @@ try {
                 $fs->mkdir($slicedDestination);
             }
             foreach ($slicedFiles as $slicedFile) {
-                \Keboola\Processor\SelectColumns\processFile(
+                processFile(
                     $slicedFile,
                     $slicedDestination,
                     $manifest,
-                    $parameters
+                    $parameters,
                 );
             }
         } else {
-            \Keboola\Processor\SelectColumns\processFile($file, $destination, $manifest, $parameters);
+            processFile($file, $destination, $manifest, $parameters);
         }
     }
-} catch (\Keboola\Processor\SelectColumns\Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
     exit(1);
-} catch (\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException $e) {
+} catch (InvalidConfigurationException $e) {
     echo 'Invalid configuration: ' . $e->getMessage();
     exit(1);
-} catch (\Exception $e) {
+} catch (Throwable $e) {
     echo $e->getMessage();
     exit(2);
 }
