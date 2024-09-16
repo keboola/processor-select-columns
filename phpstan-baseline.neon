@@ -1,0 +1,71 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition\\:\\:children\\(\\)\\.$#"
+			count: 1
+			path: src/ConfigDefinition.php
+
+		-
+			message: "#^Cannot access offset mixed on mixed\\.$#"
+			count: 1
+			path: src/processFile.php
+
+		-
+			message: "#^Function Keboola\\\\Processor\\\\SelectColumns\\\\processFile\\(\\) has parameter \\$manifest with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/processFile.php
+
+		-
+			message: "#^Function Keboola\\\\Processor\\\\SelectColumns\\\\processFile\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/processFile.php
+
+		-
+			message: "#^Function Keboola\\\\Processor\\\\SelectColumns\\\\processManifest\\(\\) has parameter \\$manifest with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/processManifest.php
+
+		-
+			message: "#^Function Keboola\\\\Processor\\\\SelectColumns\\\\processManifest\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/processManifest.php
+
+		-
+			message: "#^Function Keboola\\\\Processor\\\\SelectColumns\\\\processManifest\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/processManifest.php
+
+		-
+			message: "#^Cannot access offset 'delimiter' on mixed\\.$#"
+			count: 1
+			path: src/run.php
+
+		-
+			message: "#^Cannot access offset 'enclosure' on mixed\\.$#"
+			count: 1
+			path: src/run.php
+
+		-
+			message: "#^Cannot access offset 'parameters' on mixed\\.$#"
+			count: 1
+			path: src/run.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of method Symfony\\\\Component\\\\Serializer\\\\Encoder\\\\JsonDecode\\:\\:decode\\(\\) expects string, string\\|false given\\.$#"
+			count: 2
+			path: src/run.php
+
+		-
+			message: "#^Parameter \\#1 \\$manifest of function Keboola\\\\Processor\\\\SelectColumns\\\\processManifest expects array, mixed given\\.$#"
+			count: 1
+			path: src/run.php
+
+		-
+			message: "#^Parameter \\#1 \\$sourceFile of function Keboola\\\\Processor\\\\SelectColumns\\\\processFile expects SplFileInfo, SplFileInfo\\|string given\\.$#"
+			count: 1
+			path: src/run.php
+
+		-
+			message: "#^Parameter \\#3 \\$manifest of function Keboola\\\\Processor\\\\SelectColumns\\\\processFile expects array, mixed given\\.$#"
+			count: 2
+			path: src/run.php
